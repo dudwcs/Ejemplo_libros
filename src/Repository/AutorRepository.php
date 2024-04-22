@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Autor;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,14 @@ class AutorRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Autor::class);
+    }
+
+    public function findByFechaNac(DateTime $fechaNac):array{
+        
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT a FROM App\Entity\Autor a WHERE a.fechaNacimiento >= :fechaNac order by a.fechaNacimiento");
+        return $query->setParameter("fechaNac", $fechaNac)->getResult();
+
     }
 
     //    /**
